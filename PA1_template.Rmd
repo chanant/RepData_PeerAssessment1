@@ -5,18 +5,64 @@ output:
     keep_md: true
 ---
 
+Load in required libraries first.
+
+```{r}
+require(ggplot2)
+require(data.table)
+```
 
 ## Loading and preprocessing the data
 
+Let's unpack the data first. (The data is in a zip file in ddthe github repo.)
+Unzip and then read in, and do a quick summary.
 
+```{r}
+unzip('activity.zip')
+z <- read.csv('activity.csv', stringsAsFactors = FALSE)
+summary(z)
+```
+
+We have some NA's. We just want to ignore those days with missing data.
+
+Let's also aggregate the number of steps by day, and by interval.
+
+```{r}
+z1 <- data.table(na.omit(z))
+dd1 <- z1[,sum(steps), by = date]
+setnames(dd1, 'V1', 'steps')
+
+i <- (z1$interval %/% 100)*12 + (z1$interval %% 100) %/% 5
+z1[,'i'] <- i
+dd2 <- z1[,mean(steps), by = i]
+setnames(dd2, 'V1', 'steps')
+setnames(dd2, 'i', 'interval')
+str(dd2)
+
+```      
 
 ## What is mean total number of steps taken per day?
 
+```{r}
+hist(dd1$steps)
+m1 <- mean(dd1$steps)
+m2 <- median(dd1$steps)
+```
+So the mean = `r m1`
+
+And the median is `r m2`
 
 
 ## What is the average daily activity pattern?
 
+```{r}
+plot(dd2$interval, dd2$steps, type = 'l')
+q <- 5* (which(dd2$steps == max(dd2$steps)) - 1)
+iv <- (q %/% 60)*100 + (q %% 60)
 
+```
+
+The interval with the greatest average number of steps = `r iv`.
 
 ## Imputing missing values
 
