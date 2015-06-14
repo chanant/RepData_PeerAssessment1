@@ -66,6 +66,14 @@ The interval with the greatest average number of steps = `r iv`.
 
 ## Imputing missing values
 
+```{r}
+nn <- nrow(z) - nrow(z1)
+
+```
+The total number of NAs is `r nn`.
+
+Let's fill in missing values with the average for that interval, as we have those calculated already.
+
 
 
 ## Are there differences in activity patterns between weekdays and weekends?

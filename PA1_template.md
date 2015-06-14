@@ -104,5 +104,10 @@ The interval with the greatest average number of steps = 835.
 ## Imputing missing values
 
 
+```r
+nn <- nrow(z) - nrow(z1)
+```
+The total number of NAs is
+
 
 ## Are there differences in activity patterns between weekdays and weekends?
